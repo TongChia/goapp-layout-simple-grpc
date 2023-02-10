@@ -32,8 +32,8 @@ type GreeterUsecase struct {
 }
 
 // NewGreeterUsecase new a Greeter usecase.
-func NewGreeterUsecase(repo GreeterRepo) *GreeterUsecase {
-	return &GreeterUsecase{repo: repo}
+func NewGreeterUsecase(repo GreeterRepo, log grpclog.LoggerV2) *GreeterUsecase {
+	return &GreeterUsecase{repo: repo, log: log}
 }
 
 // CreateGreeter creates a Greeter, and returns the new Greeter.
