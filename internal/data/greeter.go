@@ -21,15 +21,23 @@ func NewGreeterRepo(data *Data, log grpclog.LoggerV2) biz.GreeterRepo {
 }
 
 func (r *greeterRepo) Save(ctx context.Context, g *biz.Greeter) (*biz.Greeter, error) {
-	return g, nil
+	res, err := r.data.db.Greeter.Create().SetTitle("text").Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &biz.Greeter{Hello: "hello " + res.Title}, nil
 }
 
 func (r *greeterRepo) Update(ctx context.Context, g *biz.Greeter) (*biz.Greeter, error) {
 	return g, nil
 }
 
-func (r *greeterRepo) FindByID(context.Context, int64) (*biz.Greeter, error) {
-	return nil, nil
+func (r *greeterRepo) FindByID(ctx context.Context, id int64) (*biz.Greeter, error) {
+	res, err := r.data.db.Greeter.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return &biz.Greeter{Hello: "hello " + res.Title}, nil
 }
 
 func (r *greeterRepo) ListByHello(context.Context, string) ([]*biz.Greeter, error) {

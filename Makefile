@@ -32,6 +32,13 @@ api:
 	fi
 	cd api && buf mod update && buf generate
 
+.PHONY: ent
+# generate ent data
+ent:
+	mkdir -p ./internal/data/ent
+	echo 'package ent' > ./internal/data/ent/package.go
+	go run -mod=mod entgo.io/ent/cmd/ent generate ./internal/data/schema --feature sql/lock --target ./internal/data/ent
+
 .PHONY: build
 # build
 build:

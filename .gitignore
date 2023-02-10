@@ -39,3 +39,4 @@ bin/
 
 # Generated files
 api/gen/
+internal/data/ent/
