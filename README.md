@@ -38,10 +38,44 @@ make build
 ```
 
 - `api`
-- `api/gen`
+
+    gRPC Protocol 模式文件，协议定义文件。
+
 - `cmd`
+
+    本项目的主干。
+
+    每个应用程序的目录名应该与你想要的可执行文件的名称相匹配(例如，/cmd/myapp)。
+    
+    不要在这个目录中放置太多代码。如果你认为代码可以导入并在其他项目中使用，那么它应该位于 /pkg 目录中。如果代码不是可重用的，或者你不希望其他人重用它，请将该代码放到 /internal 目录中。你会惊讶于别人会怎么做，所以要明确你的意图!
+    
+    通常有一个小的 main 函数，从 /internal 和 /pkg 目录导入和调用代码，除此之外没有别的东西。
+
 - `configs`
-- `internal/biz`
-- `internal/data`
+    
+    配置文件模板或默认配置。
+
+    将你的 confd 或 consul-template 模板文件放在这里。
+
+- `internal`
+    
+    私有应用程序和库代码。这是你不希望其他人在其应用程序或库中导入代码。请注意，这个布局模式是由 Go 编译器本身执行的。有关更多细节，请参阅Go 1.4 release notes 。注意，你并不局限于顶级 internal 目录。在项目树的任何级别上都可以有多个内部目录。
+
+    你可以选择向 internal 包中添加一些额外的结构，以分隔共享和非共享的内部代码。这不是必需的(特别是对于较小的项目)，但是最好有有可视化的线索来显示预期的包的用途。你的实际应用程序代码可以放在 /internal/app 目录下(例如 /internal/app/myapp)，这些应用程序共享的代码可以放在 /internal/pkg 目录下(例如 /internal/pkg/myprivlib)。
+
+
 - `internal/server`
+
+    gRPC/HTTP 服务相关代码, 包括注册中间件和配置证书等.
+
+- `internal/data`
+
+    数据模型和`repository`, 仅包含必要的增删改查, 不涉及具体的业务逻辑.
+
+- `internal/biz`
+    
+    (business) 业务逻辑代码, 为`service`提供处理业务的接口.
+
 - `internal/service`
+
+    (API entry) 客户端请求的入口, 处理或校验参数并调用处理业务接口.
